@@ -366,8 +366,8 @@ def helm_install(name = "", version = "", namespace = "", base_domain = "", clus
     env_namespace(namespace)
 
     // config (secret, configmap)
-    configmap = env_config("configmap", name, namespace)
-    secret = env_config("secret", name, namespace)
+    // configmap = env_config("configmap", name, namespace)
+    // secret = env_config("secret", name, namespace)
 
     helm_init()
 
@@ -389,8 +389,6 @@ def helm_install(name = "", version = "", namespace = "", base_domain = "", clus
                      --version $version --namespace $namespace --devel \
                      --set fullnameOverride=$name-$namespace \
                      --set ingress.basedomain=$base_domain \
-                     --set configmap.enabled=$configmap \
-                     --set secret.enabled=$secret \
                      --set replicaCount=$desired \
                      --set profile=$profile
     """
