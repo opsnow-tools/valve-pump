@@ -4,7 +4,7 @@ package com.opsnow.valve;
 def prepare(namespace = "devops") {
     this.base_domain = ""
     this.slack_token = ""
-    this.helm_state = ""
+    // this.helm_state = ""
 
     // domains
     this.jenkins = scan_domain("jenkins", namespace)
@@ -315,9 +315,9 @@ def build_image(name = "", version = "") {
 }
 
 def helm_init() {
-    if (this.helm_state) {
-        return
-    }
+    // if (this.helm_state) {
+    //     return
+    // }
 
     sh "helm init --upgrade"
     sh "helm version"
@@ -329,7 +329,7 @@ def helm_init() {
     sh "helm repo list"
     sh "helm repo update"
 
-    this.helm_state = "initialized"
+    // this.helm_state = "initialized"
 }
 
 def helm_install(name = "", version = "", namespace = "", base_domain = "", cluster = "") {
