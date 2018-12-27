@@ -383,52 +383,6 @@ def helm_delete(name = "", namespace = "", cluster = "") {
     sh "helm delete --purge $name-$namespace"
 }
 
-def draft_init() {
-    sh """
-        draft init && \
-        draft version
-    """
-
-    if (registry) {
-        sh "draft config set registry $registry"
-    }
-}
-
-def draft_up(name = "", namespace = "", base_domain = "", cluster = "") {
-    if (!name) {
-        echo "draft_up:name is null."
-        throw new RuntimeException("name is null.")
-    }
-    if (!namespace) {
-        echo "draft_up:namespace is null."
-        throw new RuntimeException("namespace is null.")
-    }
-    if (!base_domain) {
-        echo "draft_up:base_domain is null."
-        throw new RuntimeException("base_domain is null.")
-    }
-
-    // if (!base_domain) {
-    //     base_domain = this.base_domain
-    // }
-
-    // env cluster
-    env_cluster(cluster)
-
-    // env namespace
-    env_namespace(namespace)
-
-    // helm init
-    draft_init()
-
-    sh """
-        sed -i -e \"s/NAMESPACE/$namespace/g\" draft.toml && \
-        sed -i -e \"s/NAME/$name-$namespace/g\" draft.toml && \
-        draft up -e $namespace && \
-        draft logs
-    """
-}
-
 def npm_build() {
     def source_root = this.source_root
     dir("$source_root") {
