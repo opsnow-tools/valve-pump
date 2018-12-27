@@ -144,9 +144,9 @@ def env_config(type = "", name = "", namespace = "") {
     // check config
     count = sh(script: "kubectl get $type -n $namespace | grep \"$name-$namespace \" | wc -l", returnStdout: true).trim()
     if ("$count" == "0") {
-        return false
+        return "false"
     }
-    return true
+    return "true"
 }
 
 def apply_config(type = "", name = "", namespace = "", cluster = "", path = "") {
