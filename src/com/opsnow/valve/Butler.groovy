@@ -348,7 +348,7 @@ def helm_install(name = "", version = "", namespace = "", base_domain = "", clus
                      --set fullnameOverride=$name-$namespace \
                      --set ingress.basedomain=$base_domain \
                      --set configmap.enabled=$configmap \
-                      --set secret.enabled=$secret \
+                     --set secret.enabled=$secret \
                      --set replicaCount=$desired \
                      --set profile=$profile
     """
