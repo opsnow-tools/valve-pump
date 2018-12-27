@@ -209,8 +209,7 @@ def make_chart(name = "", version = "") {
         throw new RuntimeException("version is null.")
     }
 
-    def charts = new File("charts/$name")
-    if (!charts.exists()) {
+    if (!fileExists("charts/$name")) {
         return
     }
 
