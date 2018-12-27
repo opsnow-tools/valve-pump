@@ -127,6 +127,28 @@ def env_namespace(namespace = "") {
     }
 }
 
+def env_config(type = "", name = "", namespace = "") {
+    if (!type) {
+        echo "env_config:type is null."
+        throw new RuntimeException("type is null.")
+    }
+    if (!name) {
+        echo "env_config:name is null."
+        throw new RuntimeException("name is null.")
+    }
+    if (!namespace) {
+        echo "env_config:namespace is null."
+        throw new RuntimeException("namespace is null.")
+    }
+
+    // check config
+    count = sh(script: "kubectl get $type -n $namespace | grep \"$name-$namespace \" | wc -l", returnStdout: true).trim()
+    if ("$count" == "0") {
+        return false
+    }
+    return true
+}
+
 def apply_config(type = "", name = "", namespace = "", cluster = "", path = "") {
     if (!type) {
         echo "apply_config:type is null."
@@ -300,6 +322,10 @@ def helm_install(name = "", version = "", namespace = "", base_domain = "", clus
     // env namespace
     env_namespace(namespace)
 
+    // config (secret, configmap)
+    configmap = env_config("configmap", name, namespace)
+    secret = env_config("secret", name, namespace)
+
     // helm init
     helm_init()
 
@@ -321,6 +347,8 @@ def helm_install(name = "", version = "", namespace = "", base_domain = "", clus
                      --version $version --namespace $namespace --devel \
                      --set fullnameOverride=$name-$namespace \
                      --set ingress.basedomain=$base_domain \
+                     --set configmap.enabled=$configmap \
+                     --set secret.enabled=$secret \
                      --set replicaCount=$desired \
                      --set profile=$profile
     """
