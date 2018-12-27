@@ -456,7 +456,7 @@ def success(token = "", type = "", name = "", version = "", namespace = "", base
 }
 
 def proceed(token = "", type = "", name = "", version = "", namespace = "") {
-    slack("$token", "warning", "$type Proceed?", "$name-$version :rocket: $namespace", "$JOB_NAME <$RUN_DISPLAY_URL|#$BUILD_NUMBER>")
+    slack("$token", "warning", "$type Proceed?", "`$name` \`$version\` :rocket: $namespace", "$JOB_NAME <$RUN_DISPLAY_URL|#$BUILD_NUMBER>")
 }
 
 def slack(token = "", color = "", title = "", message = "", footer = "") {
