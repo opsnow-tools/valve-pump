@@ -209,6 +209,11 @@ def make_chart(name = "", version = "") {
         throw new RuntimeException("version is null.")
     }
 
+    def charts = new File("charts/$name")
+    if (!charts.exists()) {
+        return
+    }
+
     dir("charts/$name") {
         sh """
             sed -i -e \"s/name: .*/name: $name/\" Chart.yaml && \
