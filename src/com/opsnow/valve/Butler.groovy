@@ -18,21 +18,22 @@ def prepare(namespace = "devops") {
     this.slack_token = "${val.slack_token}"
 }
 
-def scan(name = "sample", branch = "master", source_lang = "") {
+def scan(name = "sample", branch = "master", source_lang = "", version = "") {
     this.name = name
     this.branch = branch
     this.source_lang = source_lang
     this.source_root = "."
 
-    date = (new Date()).format('yyyyMMdd-HHmm')
-    version = "v0.0.0-$date"
-
     // version
-    // if (branch == "master") {
-    //     version = "v0.1.1-$date"
-    // } else {
-    //     version = "v0.0.1-$date"
-    // }
+    if (!version) {
+        date = (new Date()).format('yyyyMMdd-HHmm')
+
+        if (branch == "master") {
+            version = "v0.1.0-$date"
+        } else {
+            version = "v0.0.1-$date"
+        }
+    }
 
     this.version = version
     echo "# version: $version"
