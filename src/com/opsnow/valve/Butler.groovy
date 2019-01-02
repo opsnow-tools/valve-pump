@@ -46,10 +46,8 @@ def scan(name = "sample", branch = "master", source_lang = "", version = "") {
         scan_langusge("package.json", "nodejs")
     }
 
-    sh """
-        echo "# source_lang: $source_lang" && \
-        echo "# source_root: $source_root"
-    """
+    echo "# source_lang: ${this.source_lang}"
+    echo "# source_root: ${this.source_root}"
 
     // chart
     make_chart(name, version)
@@ -290,7 +288,7 @@ def helm_init() {
     """
 }
 
-def helm_install(name = "", version = "", namespace = "", base_domain = "", cluster = "") {
+def helm_install(name = "", version = "", namespace = "", base_domain = "", cluster = "", profile = "") {
     if (!name) {
         echo "helm_install:name is null."
         throw new RuntimeException("name is null.")
@@ -308,14 +306,10 @@ def helm_install(name = "", version = "", namespace = "", base_domain = "", clus
         throw new RuntimeException("base_domain is null.")
     }
 
-    // if (!base_domain) {
-    //     base_domain = this.base_domain
-    // }
-
-    profile = "$namespace"
-    // if (cluster) {
-    //     profile = "$cluster-$namespace"
-    // }
+    // profile
+    if (!profile) {
+        profile = "$namespace"
+    }
 
     // env cluster
     env_cluster(cluster)
@@ -385,15 +379,13 @@ def helm_delete(name = "", namespace = "", cluster = "") {
 }
 
 def npm_build() {
-    def source_root = this.source_root
-    dir("$source_root") {
+    dir("${this.source_root}") {
         sh "npm run build"
     }
 }
 
 def mvn_build() {
-    def source_root = this.source_root
-    dir("$source_root") {
+    dir("${this.source_root}") {
         if (this.nexus) {
             sh "mvn package -s /home/jenkins/.m2/settings.xml -DskipTests=true"
         } else {
@@ -403,8 +395,7 @@ def mvn_build() {
 }
 
 def mvn_test() {
-    def source_root = this.source_root
-    dir("$source_root") {
+    dir("${this.source_root}") {
         if (this.nexus) {
             sh "mvn test -s /home/jenkins/.m2/settings.xml"
         } else {
@@ -414,8 +405,7 @@ def mvn_test() {
 }
 
 def mvn_deploy() {
-    def source_root = this.source_root
-    dir("$source_root") {
+    dir("${this.source_root}") {
         if (this.nexus) {
             sh "mvn deploy -s /home/jenkins/.m2/settings.xml -DskipTests=true"
         } else {
@@ -427,8 +417,7 @@ def mvn_deploy() {
 def mvn_sonar() {
     def sonarqube = this.sonarqube
     if (sonarqube) {
-        def source_root = this.source_root
-        dir("$source_root") {
+        dir("${this.source_root}") {
             if (this.nexus) {
                 sh "mvn sonar:sonar -s /home/jenkins/.m2/settings.xml -Dsonar.host.url=https://$sonarqube -DskipTests=true"
             } else {
