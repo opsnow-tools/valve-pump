@@ -46,8 +46,10 @@ def scan(name = "sample", branch = "master", source_lang = "", version = "") {
         scan_langusge("package.json", "nodejs")
     }
 
-    echo "# source_lang: ${this.source_lang}"
-    echo "# source_root: ${this.source_root}"
+    sh """
+        echo "# source_lang: $source_lang" && \
+        echo "# source_root: $source_root"
+    """
 
     // chart
     make_chart(name, version)
