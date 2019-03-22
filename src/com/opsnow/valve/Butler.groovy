@@ -524,7 +524,8 @@ def slack(token = "", color = "", title = "", message = "", footer = "") {
 def send(token = "", color = "", title = "", message = "", footer = "") {
     try {
         sh """
-            curl -sL repo.opsnow.io/valve-ctl/slack | bash -s -- --token=\'$token\' \
+            curl -sL repo.opsnow.io/valve-ctl/slack | bash -s -- \
+            --token=\'$token\' \
             --footer=\'$footer\' --footer_icon='https://jenkins.io/sites/default/files/jenkins_favicon.ico' \
             --color=\'$color\' --title=\'$title\' \'$message\'
         """
