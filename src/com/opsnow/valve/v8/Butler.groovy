@@ -792,9 +792,9 @@ def mvn_sonar(source_root = "", sonarqube = "") {
       dir("${source_root}") {
           settings = get_m2_settings()
           if (!sonar_token) {
-            sh "mvn sonar:sonar ${settings} -Dsonar.host.url=${sonarqube} -DskipTests=true"
+            sh "mvn sonar:sonar ${settings} -Dsonar.projectName='sample-spring-v8' -Dsonar.host.url=${sonarqube} -DskipTests=true"
           } else {
-            sh "mvn sonar:sonar ${settings} -Dsonar.login=${sonar_token} -Dsonar.host.url=${sonarqube} -DskipTests=true"
+            sh "mvn sonar:sonar ${settings} -Dsonar.projectName='sample-spring-v8' -Dsonar.login=${sonar_token} -Dsonar.host.url=${sonarqube} -DskipTests=true"
           }
       }
     }
