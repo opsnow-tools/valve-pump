@@ -736,12 +736,10 @@ def npm_sonar(source_root = "", sonarqube = "") {
     }
     withCredentials([string(credentialsId: 'npm-sonar', variable: 'sonar_token')]){
       source_root = get_source_root(source_root)
-      sh """
-          sed -i -e \"s,SONARQUBE,${sonarqube},g\" package.json && \
-          sed -i -e \"s/SONAR_TOKEN/${sonar_token}/g\" package.json
-      """
       dir("${source_root}") {
-        sh "npm run sonar"
+        sh """
+            npm run sonar -- -Dsonar.sources=. -Dsonar.projectKey=${name} -Dsonar.projectName=${name} -Dsonar.host.url=${sonarqube} -Dsonar.login=${sonar_token}
+        """
       }
     }
 }
@@ -834,9 +832,9 @@ def mvn_sonar(source_root = "", sonarqube = "") {
       dir("${source_root}") {
           settings = get_m2_settings()
           if (!sonar_token) {
-            sh "mvn sonar:sonar ${settings} -Dsonar.host.url=${sonarqube} -DskipTests=true"
+            sh "mvn sonar:sonar ${settings} -Dsonar.projectName=${name} -Dsonar.host.url=${sonarqube} -DskipTests=true"
           } else {
-            sh "mvn sonar:sonar ${settings} -Dsonar.login=${sonar_token} -Dsonar.host.url=${sonarqube} -DskipTests=true"
+            sh "mvn sonar:sonar ${settings} -Dsonar.projectName=${name} -Dsonar.login=${sonar_token} -Dsonar.host.url=${sonarqube} -DskipTests=true"
           }
       }
     }
